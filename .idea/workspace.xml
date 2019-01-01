@@ -5,7 +5,6 @@
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/litespring/beans/factory/support/ClassPathXmlApplicationContext.java" />
       <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/litespring/beans/factory/support/context/ApplicationContext.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/petstore-v1.xml" afterPath="$PROJECT_DIR$/src/test/resources/petstore-v1.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -605,7 +604,14 @@
       <option name="project" value="LOCAL" />
       <updated>1546329963983</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="重构，提取BeanDefintionRegistry">
+      <created>1546330760594</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1546330760594</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -635,7 +641,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6580000" />
+    <option name="totallyTimeSpent" value="6637000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
