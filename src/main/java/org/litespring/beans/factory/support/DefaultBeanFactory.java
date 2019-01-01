@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 ////同时这也是Spring的命名规范
 public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
 
+    private ClassLoader beanClassLoader;
+
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
 
     public DefaultBeanFactory() {
@@ -42,7 +44,7 @@ public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
         if(bd == null){
             return null;
         }
-        ClassLoader cl = ClassUtils.getDefaultClassLoader();
+        ClassLoader cl = this.getBeanClassLoader();
         String beanClassName = bd.getBeanClassName();
         try {
             //通过反射new出一个类
@@ -52,6 +54,15 @@ public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
         } catch (Exception e) {
             throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
         }
+    }
+
+
+    public ClassLoader getBeanClassLoader() {
+        return beanClassLoader;
+    }
+
+    public void setBeanClassLoader(ClassLoader beanClassLoader) {
+        this.beanClassLoader = beanClassLoader;
     }
 
 }

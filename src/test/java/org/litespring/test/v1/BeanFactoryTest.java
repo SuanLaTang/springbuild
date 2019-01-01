@@ -8,6 +8,7 @@ import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
 import org.litespring.beans.factory.support.factory.xml.XmlBeanDefinitionReader;
+import org.litespring.core.io.ClassPathResource;
 import org.litespring.service.v1.PetStoreService;
 import org.junit.Assert;
 
@@ -29,7 +30,7 @@ public class BeanFactoryTest {
     @Test
     public void testGetBean() {
 
-        reader.loadBeanDefinitions("petstore-v1.xml");
+        reader.loadBeanDefinitions(new ClassPathResource("petstore-v1.xml"));
         BeanDefinition bd = factory.getBeanDefinition("petStore");
 
         //获取后还需要判断是不是和xml中的class相等
@@ -45,9 +46,12 @@ public class BeanFactoryTest {
 
     }
 
+    /**
+     * 测试 xml 文件中不包含对应BeanID时，抛出 BeanCreationException
+     */
     @Test
     public void testInvalidBean(){
-        reader.loadBeanDefinitions("petstore-v1.xml");
+        reader.loadBeanDefinitions(new ClassPathResource("petstore-v1.xml"));
         try{
             factory.getBean("invalidBean");
         }catch(BeanCreationException e){
@@ -56,10 +60,13 @@ public class BeanFactoryTest {
         Assert.fail("expect BeanCreationException ");
     }
 
+    /**
+     * 测试文件名称不对时，捕获BeanDefinitionStoreException
+     */
     @Test
     public void testInvalidXML(){
         try{
-            reader.loadBeanDefinitions("xxx.xml");
+            reader.loadBeanDefinitions(new ClassPathResource("xxxx.xml"));
         }catch(BeanDefinitionStoreException e){
             return;
         }
