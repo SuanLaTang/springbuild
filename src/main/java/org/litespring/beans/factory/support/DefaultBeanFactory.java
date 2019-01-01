@@ -18,56 +18,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
 ////同时这也是Spring的命名规范
-public class DefaultBeanFactory implements BeanFactory {
-
-    public static final String ID_ATTRIBUTE = "id";
-
-    public static final String CLASS_ATTRIBUTE = "class";
+public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>(64);
 
-    //我们采用dom4j进行解析
-    //在testGetBean中可以看到，接收了一个xml的参数
-    //我们就是要解析这个xml文件
-    public DefaultBeanFactory(String configFile) {
-        loadBeanDefinition(configFile);
+    public DefaultBeanFactory() {
+
     }
 
-    /**
-     * 解析传进来的xml文件
-     * @param configFile
-     */
-    private void loadBeanDefinition(String configFile) {
-        InputStream is = null;
-        try{
-            //通过classloader获取inputStream
-            ClassLoader cl = ClassUtils.getDefaultClassLoader();
-            is = cl.getResourceAsStream(configFile);
-            //有inputStream后，可以调用dom4j相关的reader
-            SAXReader reader = new SAXReader();
-            Document doc = reader.read(is);
-            //变成document后，可以遍历标签
-            Element root = doc.getRootElement(); //root就是<beans>
-            Iterator<Element> iter = root.elementIterator();
-            while(iter.hasNext()){
-                Element ele = (Element)iter.next();
-                String id = ele.attributeValue(ID_ATTRIBUTE);
-                String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
-                BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
-                //把获取到的BeanDefinition保留下来，存到map里
-                this.beanDefinitionMap.put(id, bd);
-            }
-        } catch (DocumentException e) {
-            throw new BeanDefinitionStoreException("IOException parsing XML document from " + configFile,e);
-        }finally{
-            if(is != null){
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    @Override
+    public void registerBeanDefinition(String beanID, BeanDefinition bd){
+        this.beanDefinitionMap.put(beanID, bd);
     }
 
     @Override
@@ -75,26 +36,24 @@ public class DefaultBeanFactory implements BeanFactory {
         return this.beanDefinitionMap.get(beanID);
     }
 
-    /**
-     * 通过反射去创建bean实例
-     * 自定义异常，使代码不会出现过多try/catch
-     * @param beanID
-     * @return
-     */
     @Override
     public Object getBean(String beanID) {
         BeanDefinition bd = this.getBeanDefinition(beanID);
         if(bd == null){
-            throw new BeanCreationException("Bean Definition does not exist");
+            return null;
         }
         ClassLoader cl = ClassUtils.getDefaultClassLoader();
         String beanClassName = bd.getBeanClassName();
         try {
+            //通过反射new出一个类
+            //类必须要有无参的构造函数，才能newInstance出来
             Class<?> clz = cl.loadClass(beanClassName);
-            return clz.newInstance();
+			return clz.newInstance();
         } catch (Exception e) {
             throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
         }
     }
 
 }
+
+
