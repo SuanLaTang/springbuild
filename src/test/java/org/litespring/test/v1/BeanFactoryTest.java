@@ -23,7 +23,6 @@ public class BeanFactoryTest {
     public void setUp(){
         factory = new DefaultBeanFactory();
         reader = new XmlBeanDefinitionReader(factory);
-
     }
 
     @Test
@@ -31,6 +30,12 @@ public class BeanFactoryTest {
 
         reader.loadBeanDefinitions(new ClassPathResource("petstore-v1.xml"));
         BeanDefinition bd = factory.getBeanDefinition("petStore");
+
+        Assert.assertTrue(bd.isSingleton());
+
+        Assert.assertFalse(bd.isPrototype());
+
+        Assert.assertEquals(BeanDefinition.SCOPE_DEFAULT,bd.getScope());
 
         //获取后还需要判断是不是和xml中的class相等
         //assertEquals() 第一个参数是期待值，第二个是实际值
@@ -42,6 +47,10 @@ public class BeanFactoryTest {
 
         //判断是否为空
         Assert.assertNotNull(petStore);
+
+         PetStoreService petStore1 = (PetStoreService)factory.getBean("petStore");
+
+        Assert.assertTrue(petStore.equals(petStore1));
 
     }
 

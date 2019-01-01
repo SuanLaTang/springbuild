@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
 ////同时这也是Spring的命名规范
-public class DefaultBeanFactory implements ConfigurableBeanFactory,BeanDefinitionRegistry {
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory,BeanDefinitionRegistry {
 
     private ClassLoader beanClassLoader;
 
@@ -37,6 +37,18 @@ public class DefaultBeanFactory implements ConfigurableBeanFactory,BeanDefinitio
         if(bd == null){
             return null;
         }
+        if(bd.isSingleton()){
+            Object bean = this.getSingleton(beanID);
+            if(bean == null){
+                bean = createBean(bd);
+                this.registerSingleton(beanID, bean);
+            }
+            return bean;
+        }
+        return createBean(bd);
+    }
+
+    private Object createBean(BeanDefinition bd) {
         ClassLoader cl = this.getBeanClassLoader();
         String beanClassName = bd.getBeanClassName();
         try {
