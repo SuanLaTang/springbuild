@@ -1,4 +1,4 @@
-package org.litespring.beans.factory.support.factory.xml;
+package org.litespring.beans.factory.xml;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -6,7 +6,7 @@ import org.dom4j.io.SAXReader;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.support.BeanDefinitionRegistry;
-import org.litespring.beans.factory.support.factory.support.GenericBeanDefinition;
+import org.litespring.beans.factory.support.GenericBeanDefinition;
 import org.litespring.core.io.Resource;
 
 import java.io.IOException;

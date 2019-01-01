@@ -1,24 +1,17 @@
 package org.litespring.beans.factory.support;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanCreationException;
-import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.BeanFactory;
-import org.litespring.beans.factory.support.factory.support.GenericBeanDefinition;
+import org.litespring.beans.factory.config.ConfigurableBeanFactory;
 import org.litespring.util.ClassUtils;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
 ////同时这也是Spring的命名规范
-public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
+public class DefaultBeanFactory implements ConfigurableBeanFactory,BeanDefinitionRegistry {
 
     private ClassLoader beanClassLoader;
 
@@ -57,10 +50,12 @@ public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry {
     }
 
 
+    @Override
     public ClassLoader getBeanClassLoader() {
-        return beanClassLoader;
+        return (this.beanClassLoader != null ? this.beanClassLoader : ClassUtils.getDefaultClassLoader());
     }
 
+    @Override
     public void setBeanClassLoader(ClassLoader beanClassLoader) {
         this.beanClassLoader = beanClassLoader;
     }

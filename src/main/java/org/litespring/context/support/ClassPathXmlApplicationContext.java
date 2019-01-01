@@ -1,6 +1,6 @@
 package org.litespring.context.support;
 
-import org.litespring.beans.factory.support.factory.support.AbstractApplicationContext;
+import org.litespring.beans.factory.support.AbstractApplicationContext;
 import org.litespring.core.io.ClassPathResource;
 import org.litespring.core.io.Resource;
 
