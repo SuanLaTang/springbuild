@@ -66,8 +66,6 @@ public class DefaultBeanFactory implements BeanFactory {
                 }
             }
         }
-
-
     }
 
     @Override
@@ -75,6 +73,11 @@ public class DefaultBeanFactory implements BeanFactory {
         return this.beanDefinitionMap.get(beanID);
     }
 
+    /**
+     * 通过反射去创建bean实例
+     * @param beanID
+     * @return
+     */
     @Override
     public Object getBean(String beanID) {
         BeanDefinition bd = this.getBeanDefinition(beanID);
@@ -89,10 +92,8 @@ public class DefaultBeanFactory implements BeanFactory {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
-
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-
             e.printStackTrace();
         }
         return null;
