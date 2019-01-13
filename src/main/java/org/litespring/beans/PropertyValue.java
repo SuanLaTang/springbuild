@@ -3,10 +3,14 @@ package org.litespring.beans;
 public class PropertyValue {
 	private final String name;
 
+	//value对于这个简版的Spring来说，有两种可能：
+	// RuntimeBeanReference 或者 TypedStringValue
 	private final Object value;
 
+	//代表 value 是否已经转换成 convertedValue
 	private boolean converted = false;
 
+	//保存 RuntimeBeanReference 经过查找后获取到的值，会存放到 convertedValue 中
 	private Object convertedValue;
 	
 	public PropertyValue(String name, Object value) {

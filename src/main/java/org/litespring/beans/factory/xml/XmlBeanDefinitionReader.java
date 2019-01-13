@@ -76,6 +76,11 @@ public class XmlBeanDefinitionReader {
         }
     }
 
+    /**
+     * 解析 PropertyElement ，取所有的 PROPERTY 并遍历，通过取出
+     * @param beanElem
+     * @param bd
+     */
     public void parsePropertyElement(Element beanElem, BeanDefinition bd) {
         Iterator iter= beanElem.elementIterator(PROPERTY_ELEMENT);
         while(iter.hasNext()){
@@ -85,8 +90,6 @@ public class XmlBeanDefinitionReader {
                 logger.fatal("Tag 'property' must have a 'name' attribute");
                 return;
             }
-
-
             Object val = parsePropertyValue(propElem, bd, propertyName);
             PropertyValue pv = new PropertyValue(propertyName, val);
 
@@ -95,6 +98,13 @@ public class XmlBeanDefinitionReader {
 
     }
 
+    /**
+     * 解析 value
+     * @param ele
+     * @param bd
+     * @param propertyName
+     * @return
+     */
     public Object parsePropertyValue(Element ele, BeanDefinition bd, String propertyName) {
         String elementName = (propertyName != null) ?
                 "<property> element for property '" + propertyName + "'" :
@@ -117,7 +127,7 @@ public class XmlBeanDefinitionReader {
             return valueHolder;
         }
         else {
-
+            //目前还不支持其他解析，所以抛出异常
             throw new RuntimeException(elementName + " must specify a ref or value");
         }
     }
