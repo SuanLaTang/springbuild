@@ -5,6 +5,8 @@ public class PropertyValue {
 
 	//value对于这个简版的Spring来说，有两种可能：
 	// RuntimeBeanReference 或者 TypedStringValue
+	// RuntimeBeanReference ：把 BeanId 变成 Bean 实例
+	// TypedStringValue 把value 变成一个实际的值
 	private final Object value;
 
 	//代表 value 是否已经转换成 convertedValue
