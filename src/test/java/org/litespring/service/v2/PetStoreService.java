@@ -6,7 +6,8 @@ import org.litespring.dao.v2.ItemDao;
 public class PetStoreService {
 	private AccountDao accountDao;
 	private ItemDao  itemDao;
-	
+	private String owner;
+
 	public AccountDao getAccountDao() {
 		return accountDao;
 	}
@@ -18,5 +19,11 @@ public class PetStoreService {
 	}
 	public void setItemDao(ItemDao itemDao) {
 		this.itemDao = itemDao;
+	}
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 }
