@@ -115,15 +115,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this);
         SimpleTypeConverter converter = new SimpleTypeConverter();
         try{
+            //获取bean中有哪些字段和方法体
+            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+            //获取字段
+            PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
             for (PropertyValue pv : pvs){
                 String propertyName = pv.getName();
                 Object originalValue = pv.getValue();
                 Object resolvedValue = valueResolver.resolveValueIfNecessary(originalValue);
 
-                //获取bean中有哪些字段和方法体
-                BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
-                //获取字段
-                PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
                 for (PropertyDescriptor pd : pds) {
                     if(pd.getName().equals(propertyName)){
                         //getWriteMethod() 就是 setter方法 (实现TypeConverter 后弃用)
