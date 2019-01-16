@@ -2,6 +2,7 @@ package org.litespring.beans.factory.support;
 
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.PropertyValue;
+import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
@@ -112,7 +113,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         }
 
         BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this);
-
+        SimpleTypeConverter converter = new SimpleTypeConverter();
         try{
             for (PropertyValue pv : pvs){
                 String propertyName = pv.getName();
@@ -125,8 +126,10 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
                 PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
                 for (PropertyDescriptor pd : pds) {
                     if(pd.getName().equals(propertyName)){
-                        //getWriteMethod() 就是 setter方法
-                        pd.getWriteMethod().invoke(bean, resolvedValue);
+                        //getWriteMethod() 就是 setter方法 (实现TypeConverter 后弃用)
+//                        pd.getWriteMethod().invoke(bean, resolvedValue);
+                        Object convertedValue = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
+                        pd.getWriteMethod().invoke(bean, convertedValue);
                         break;
                     }
                 }
