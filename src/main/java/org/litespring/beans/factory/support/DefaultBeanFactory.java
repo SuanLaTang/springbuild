@@ -126,7 +126,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
                 for (PropertyDescriptor pd : pds) {
                     if(pd.getName().equals(propertyName)){
-                        //getWriteMethod() 就是 setter方法 (实现TypeConverter 后弃用)
+                        //getWriteMethod() 就是 setter方法 (实现 TypeConverter 后弃用)
 //                        pd.getWriteMethod().invoke(bean, resolvedValue);
                         Object convertedValue = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
                         pd.getWriteMethod().invoke(bean, convertedValue);

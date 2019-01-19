@@ -1,5 +1,8 @@
 package org.litespring.beans;
 
+/**
+ * 类型转换异常
+ */
 public class TypeMismatchException extends BeansException{
 	private transient Object value;
 

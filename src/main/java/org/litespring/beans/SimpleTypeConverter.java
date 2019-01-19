@@ -20,7 +20,7 @@ public class SimpleTypeConverter implements TypeConverter {
 
 	@Override
 	public <T> T convertIfNecessary(Object value, Class<T> requiredType) throws TypeMismatchException {
-		//判断这个值能不能直接付给它，如果能，就直接返回了；如果不行，
+		//判断这个值能不能直接付给它，如果能，就直接返回了
 		if(ClassUtils.isAssignableValue(requiredType, value)){
 			return (T)value;			
 		} else{
@@ -49,6 +49,7 @@ public class SimpleTypeConverter implements TypeConverter {
 	}
 
 	//判断 defaultEditors 是否为空
+	// PropertyEditor 用作对象转换
 	public PropertyEditor getDefaultEditor(Class<?> requiredType) {
 	
 		if (this.defaultEditors == null) {
