@@ -88,15 +88,29 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
      * @return
      */
     private Object instantiateBean(BeanDefinition bd) {
-        ClassLoader cl = this.getBeanClassLoader();
-        String beanClassName = bd.getBeanClassName();
-        try {
-            //通过反射new出一个类
-            //类必须要有无参的构造函数，才能newInstance出来
-            Class<?> clz = cl.loadClass(beanClassName);
-			return clz.newInstance();
-        } catch (Exception e) {
-            throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+//        ClassLoader cl = this.getBeanClassLoader();
+//        String beanClassName = bd.getBeanClassName();
+//        try {
+//            //通过反射new出一个类
+//            //类必须要有无参的构造函数，才能newInstance出来
+//            Class<?> clz = cl.loadClass(beanClassName);
+//			return clz.newInstance();
+//        } catch (Exception e) {
+//            throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+//        }
+
+        if(bd.hasConstructorArgumentValues()){
+            ConstructorResolver resolver = new ConstructorResolver(this);
+            return resolver.autowireConstructor(bd);
+        }else{
+            ClassLoader cl = this.getBeanClassLoader();
+            String beanClassName = bd.getBeanClassName();
+            try {
+                Class<?> clz = cl.loadClass(beanClassName);
+                return clz.newInstance();
+            } catch (Exception e) {
+                throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+            }
         }
     }
 
