@@ -88,17 +88,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
      * @return
      */
     private Object instantiateBean(BeanDefinition bd) {
-//        ClassLoader cl = this.getBeanClassLoader();
-//        String beanClassName = bd.getBeanClassName();
-//        try {
-//            //通过反射new出一个类
-//            //类必须要有无参的构造函数，才能newInstance出来
-//            Class<?> clz = cl.loadClass(beanClassName);
-//			return clz.newInstance();
-//        } catch (Exception e) {
-//            throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
-//        }
-
+        //如果 BeanDefinition 有构造函数参数，就用构造器注入
         if(bd.hasConstructorArgumentValues()){
             ConstructorResolver resolver = new ConstructorResolver(this);
             return resolver.autowireConstructor(bd);
@@ -106,6 +96,8 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
             ClassLoader cl = this.getBeanClassLoader();
             String beanClassName = bd.getBeanClassName();
             try {
+                //通过反射new出一个类
+                //类必须要有无参的构造函数，才能newInstance出来
                 Class<?> clz = cl.loadClass(beanClassName);
                 return clz.newInstance();
             } catch (Exception e) {

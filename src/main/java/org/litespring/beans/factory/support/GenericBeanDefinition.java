@@ -71,6 +71,10 @@ public class GenericBeanDefinition implements BeanDefinition{
         return this.id;
     }
 
+    /**
+     * 判断当前构造参数是否为空
+     * @return
+     */
     @Override
     public boolean hasConstructorArgumentValues() {
         return !this.constructorArgument.isEmpty();

@@ -1,5 +1,11 @@
 package org.litespring.beans;
 
+/**
+ * setter 注入的数据结构
+ * 设计一个数据结构 PropertyValue
+ * 解析XML，填充这个数据结构
+ * 利用这个数据结构做事情
+ */
 public class PropertyValue {
 	private final String name;
 

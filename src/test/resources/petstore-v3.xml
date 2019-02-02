@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--构造器注入版本-->
     <bean id="petStore"
           class="org.litespring.service.v3.PetStoreService" >
         <constructor-arg  ref="accountDao"/>

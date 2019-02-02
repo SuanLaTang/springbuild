@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--Setter方式注入版本-->
     <bean id="petStore"
           class="org.litespring.service.v2.PetStoreService" >
 

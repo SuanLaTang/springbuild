@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- 实现 BeanFactory 解析版本 -->
     <bean id="petStore"
           class="org.litespring.service.v1.PetStoreService" >
     </bean>

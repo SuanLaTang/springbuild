@@ -4,6 +4,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 和Setter注入类似
+ * 设计一个数据结构 ConstuctorArgument( setter 使用 PropertyValue )
+ * 解析XML，填充这个数据结构
+ * 利用这个数据结构做事情
+ */
 public class ConstructorArgument {
 
 	
@@ -48,8 +54,9 @@ public class ConstructorArgument {
 
 
 	/**
-	 * Holder for a constructor argument value, with an optional type
-	 * attribute indicating the target type of the actual constructor argument.
+	 * ValueHolder 是一个静态内部类
+	 * ValueHolder 用于描述构造函数的参数，ValueHolder 与 ConstructorArgument 是高内聚的关系
+	 * 但在这个demo里，type 和 name 其实没实际作用，因为只实现 value 方面的构造器注入
 	 */
 	public static class ValueHolder{
 
