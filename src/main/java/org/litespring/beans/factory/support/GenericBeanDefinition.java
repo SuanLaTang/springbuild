@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 成员变量分别对应petstore-v1.xml中的 id 和 class
  */
-public class GenericBeanDefinition implements BeanDefinition{
+public class GenericBeanDefinition implements BeanDefinition {
 
     private String id;
     private String beanClassName;
@@ -23,9 +23,16 @@ public class GenericBeanDefinition implements BeanDefinition{
     private ConstructorArgument constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String beanClassName) {
-
         this.id = id;
         this.beanClassName = beanClassName;
+    }
+
+    public GenericBeanDefinition() {
+
+    }
+
+    public void setBeanClassName(String className){
+        this.beanClassName = className;
     }
 
     @Override
@@ -57,7 +64,7 @@ public class GenericBeanDefinition implements BeanDefinition{
     }
 
     @Override
-    public List<PropertyValue> getPropertyValues(){
+    public List<PropertyValue> getPropertyValues() {
         return this.propertyValues;
     }
 
@@ -71,8 +78,13 @@ public class GenericBeanDefinition implements BeanDefinition{
         return this.id;
     }
 
+    public void setId(String id){
+        this.id = id;
+    }
+
     /**
      * 判断当前构造参数是否为空
+     *
      * @return
      */
     @Override

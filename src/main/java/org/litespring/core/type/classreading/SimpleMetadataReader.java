@@ -9,7 +9,9 @@ import org.litespring.core.type.AnnotationMetadata;
 import org.litespring.core.type.ClassMetadata;
 import org.springframework.asm.ClassReader;
 
-
+/**
+ * 有了 SimpleMetadataReader后，不用关注ASM之类的底层问题
+ */
 public class SimpleMetadataReader implements MetadataReader {
 
 	private final Resource resource;
