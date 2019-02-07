@@ -99,6 +99,7 @@ public class ClassUtils {
 
     /**
      * 把路径中的斜杠(/)变成(.)
+     * org/litespring/service/v4/PetStoreService → org.litespring.service.v4.PetStoreService
      * @param resourcePath
      * @return
      */
@@ -109,6 +110,7 @@ public class ClassUtils {
 
     /**
      * 把点(.)变成斜杠(/)
+     * org.litespring.service.v4.PetStoreService → org/litespring/service/v4/PetStoreService
      * @param className
      * @return
      */
