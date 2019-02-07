@@ -13,6 +13,7 @@ import org.litespring.beans.factory.config.RuntimeBeanReference;
 import org.litespring.beans.factory.config.TypedStringValue;
 import org.litespring.beans.factory.support.BeanDefinitionRegistry;
 import org.litespring.beans.factory.support.GenericBeanDefinition;
+import org.litespring.context.annotation.ClassPathBeanDefinitionScanner;
 import org.litespring.core.io.Resource;
 import org.litespring.util.StringUtils;
 
@@ -40,6 +41,12 @@ public class XmlBeanDefinitionReader {
 
     public static final String TYPE_ATTRIBUTE = "type";
 
+    //这两个URI对应 petstore-v4.xml 中的uri
+    public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
+    public static final String CONTEXT_NAMESPACE_URI = "http://www.springframework.org/schema/context";
+
+    private static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
+
     BeanDefinitionRegistry registry;
 
     protected final Log logger = LogFactory.getLog(getClass());
@@ -59,6 +66,9 @@ public class XmlBeanDefinitionReader {
             Iterator<Element> iter = root.elementIterator();
             while(iter.hasNext()){
                 Element ele = (Element)iter.next();
+                //对于每个元素，我们需要判断它的URI
+                String namespaceUri = ele.getNamespaceURI();
+                /* 弃用部分
                 String id = ele.attributeValue(ID_ATTRIBUTE);
                 String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
                 BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
@@ -67,7 +77,15 @@ public class XmlBeanDefinitionReader {
                 }
                 parseConstructorArgElements(ele,bd);
                 parsePropertyElement(ele,bd);
-                this.registry.registerBeanDefinition(id, bd);
+                this.registry.registerBeanDefinition(id, bd);*/
+                //如果是普通的bean，走老的路径，就是上方注释的代码
+                if(this.isDefaultNamespace(namespaceUri)){
+                    parseDefaultElement(ele); //普通的bean
+                }
+                //如果是注解修饰的bean，走新的路径
+                else if(this.isContextNamespace(namespaceUri)){
+                    parseComponentElement(ele); //例如<context:component-scan>
+                }
             }
         } catch (Exception e) {
             throw new BeanDefinitionStoreException("IOException parsing XML document from " +  resource.getDescription(),e);
@@ -80,6 +98,32 @@ public class XmlBeanDefinitionReader {
                 }
             }
         }
+    }
+
+    private void parseComponentElement(Element ele) {
+        //解析<context:component-scan base-package="org.litespring.service.v4,org.litespring.dao.v4">中package的属性
+        String basePackages = ele.attributeValue(BASE_PACKAGE_ATTRIBUTE);
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
+        scanner.doScan(basePackages);
+
+    }
+    private void parseDefaultElement(Element ele) {
+        String id = ele.attributeValue(ID_ATTRIBUTE);
+        String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
+        BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
+        if (ele.attribute(SCOPE_ATTRIBUTE)!=null) {
+            bd.setScope(ele.attributeValue(SCOPE_ATTRIBUTE));
+        }
+        parseConstructorArgElements(ele,bd);
+        parsePropertyElement(ele,bd);
+        this.registry.registerBeanDefinition(id, bd);
+
+    }
+    public boolean isDefaultNamespace(String namespaceUri) {
+        return (!StringUtils.hasLength(namespaceUri) || BEANS_NAMESPACE_URI.equals(namespaceUri));
+    }
+    public boolean isContextNamespace(String namespaceUri){
+        return (!StringUtils.hasLength(namespaceUri) || CONTEXT_NAMESPACE_URI.equals(namespaceUri));
     }
 
     /**
