@@ -1,5 +1,6 @@
 package org.litespring.core.type.classreading;
 
+import org.litespring.core.type.ClassMetadata;
 import org.litespring.util.ClassUtils;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Opcodes;
@@ -10,7 +11,8 @@ import org.springframework.asm.SpringAsmInfo;
  * ClassVisitor 是 ASM 的一个接口，定义在读取Class字节码时会触发的事件，如类头解析完成、注解解析、字段解析、方法解析等
  * 实现 visitMethod()/visitAnnotation() 等方法，用以定义对类结构（如方法、字段、注解）的访问方法
  */
-public class ClassMetadataReadingVisitor extends ClassVisitor /*implements ClassMetadata*/ {
+//public class ClassMetadataReadingVisitor extends ClassVisitor{
+public class ClassMetadataReadingVisitor extends ClassVisitor implements ClassMetadata {
 
 	private String className;
 
