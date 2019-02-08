@@ -14,6 +14,7 @@ import java.util.Set;
  * 专门处理Annotation
  * 继承了 ClassMetadataReadingVisitor，既有 visit 方法
  * 也额外增加了 visitAnnotation 方法
+ *
  */
 //public class AnnotationMetadataReadingVisitor extends ClassMetadataReadingVisitor {
 public class AnnotationMetadataReadingVisitor extends ClassMetadataReadingVisitor implements AnnotationMetadata {
