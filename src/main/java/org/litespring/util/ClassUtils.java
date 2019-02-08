@@ -7,24 +7,31 @@ import java.util.Map;
  * Spring已写好的工具类，能拿来即用
  */
 public class ClassUtils {
-    /** The package separator character: '.' */
+    /**
+     * The package separator character: '.'
+     */
     private static final char PACKAGE_SEPARATOR = '.';
 
-    /** The path separator character: '/' */
+    /**
+     * The path separator character: '/'
+     */
     private static final char PATH_SEPARATOR = '/';
 
-    /** The inner class separator character: '$' */
+    /**
+     * The inner class separator character: '$'
+     */
     private static final char INNER_CLASS_SEPARATOR = '$';
 
-    /** The CGLIB class separator: "$$" */
+    /**
+     * The CGLIB class separator: "$$"
+     */
     public static final String CGLIB_CLASS_SEPARATOR = "$$";
 
     public static ClassLoader getDefaultClassLoader() {
         ClassLoader cl = null;
         try {
             cl = Thread.currentThread().getContextClassLoader();
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             // Cannot access thread context ClassLoader - falling back...
         }
         if (cl == null) {
@@ -34,8 +41,7 @@ public class ClassUtils {
                 // getClassLoader() returning null indicates the bootstrap ClassLoader
                 try {
                     cl = ClassLoader.getSystemClassLoader();
-                }
-                catch (Throwable ex) {
+                } catch (Throwable ex) {
                     // Cannot access system ClassLoader - oh well, maybe the caller can live with null...
                 }
             }
@@ -76,6 +82,7 @@ public class ClassUtils {
         Assert.notNull(type, "Type must not be null");
         return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
     }
+
     public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
         Assert.notNull(lhsType, "Left-hand side type must not be null");
         Assert.notNull(rhsType, "Right-hand side type must not be null");
@@ -87,8 +94,7 @@ public class ClassUtils {
             if (resolvedPrimitive != null && lhsType.equals(resolvedPrimitive)) {
                 return true;
             }
-        }
-        else {
+        } else {
             Class<?> resolvedWrapper = primitiveTypeToWrapperMap.get(rhsType);
             if (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper)) {
                 return true;
@@ -100,6 +106,7 @@ public class ClassUtils {
     /**
      * 把路径中的斜杠(/)变成(.)
      * org/litespring/service/v4/PetStoreService → org.litespring.service.v4.PetStoreService
+     *
      * @param resourcePath
      * @return
      */
@@ -111,6 +118,7 @@ public class ClassUtils {
     /**
      * 把点(.)变成斜杠(/)
      * org.litespring.service.v4.PetStoreService → org/litespring/service/v4/PetStoreService
+     *
      * @param className
      * @return
      */

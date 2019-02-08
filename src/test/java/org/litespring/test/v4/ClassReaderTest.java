@@ -1,7 +1,5 @@
 package org.litespring.test.v4;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.litespring.core.annotation.AnnotationAttributes;
@@ -10,47 +8,48 @@ import org.litespring.core.type.classreading.AnnotationMetadataReadingVisitor;
 import org.litespring.core.type.classreading.ClassMetadataReadingVisitor;
 import org.springframework.asm.ClassReader;
 
+import java.io.IOException;
 
 
 public class ClassReaderTest {
 
 
-	@Test
-	public void testGetClasMetaData() throws IOException {
-		ClassPathResource resource = new ClassPathResource("org/litespring/service/v4/PetStoreService.class");
-		ClassReader reader = new ClassReader(resource.getInputStream());
+    @Test
+    public void testGetClasMetaData() throws IOException {
+        ClassPathResource resource = new ClassPathResource("org/litespring/service/v4/PetStoreService.class");
+        ClassReader reader = new ClassReader(resource.getInputStream());
 
-		ClassMetadataReadingVisitor visitor = new ClassMetadataReadingVisitor();
+        ClassMetadataReadingVisitor visitor = new ClassMetadataReadingVisitor();
 
-		reader.accept(visitor, ClassReader.SKIP_DEBUG);
+        reader.accept(visitor, ClassReader.SKIP_DEBUG);
 
-		Assert.assertFalse(visitor.isAbstract());
-		Assert.assertFalse(visitor.isInterface());
-		Assert.assertFalse(visitor.isFinal());
-		Assert.assertEquals("org.litespring.service.v4.PetStoreService", visitor.getClassName());
-		Assert.assertEquals("java.lang.Object", visitor.getSuperClassName());
-		Assert.assertEquals(0, visitor.getInterfaceNames().length);
-	}
+        Assert.assertFalse(visitor.isAbstract());
+        Assert.assertFalse(visitor.isInterface());
+        Assert.assertFalse(visitor.isFinal());
+        Assert.assertEquals("org.litespring.service.v4.PetStoreService", visitor.getClassName());
+        Assert.assertEquals("java.lang.Object", visitor.getSuperClassName());
+        Assert.assertEquals(0, visitor.getInterfaceNames().length);
+    }
 
 
-	@Test
-	public void testGetAnnonation() throws Exception{
-		ClassPathResource resource = new ClassPathResource("org/litespring/service/v4/PetStoreService.class");
-		ClassReader reader = new ClassReader(resource.getInputStream());
-		
-		AnnotationMetadataReadingVisitor visitor = new AnnotationMetadataReadingVisitor();
+    @Test
+    public void testGetAnnonation() throws Exception {
+        ClassPathResource resource = new ClassPathResource("org/litespring/service/v4/PetStoreService.class");
+        ClassReader reader = new ClassReader(resource.getInputStream());
 
-		// accept() 在这里做了很多处理，例如 获取 Class 的元数据，读取 Metadata 和 Annonation，读取 Annonation 当中的属性
-		reader.accept(visitor, ClassReader.SKIP_DEBUG);
-		
-		String annotation = "org.litespring.stereotype.Component";
-		Assert.assertTrue(visitor.hasAnnotation(annotation));
-		
-		AnnotationAttributes attributes = visitor.getAnnotationAttributes(annotation);
-		
-		Assert.assertEquals("petStore", attributes.get("value"));		
-		
-	}
+        AnnotationMetadataReadingVisitor visitor = new AnnotationMetadataReadingVisitor();
+
+        // accept() 在这里做了很多处理，例如 获取 Class 的元数据，读取 Metadata 和 Annonation，读取 Annonation 当中的属性
+        reader.accept(visitor, ClassReader.SKIP_DEBUG);
+
+        String annotation = "org.litespring.stereotype.Component";
+        Assert.assertTrue(visitor.hasAnnotation(annotation));
+
+        AnnotationAttributes attributes = visitor.getAnnotationAttributes(annotation);
+
+        Assert.assertEquals("petStore", attributes.get("value"));
+
+    }
 
 
 }

@@ -51,21 +51,21 @@ public class XmlBeanDefinitionReader {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry){
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
         this.registry = registry;
     }
 
-    public void loadBeanDefinitions(Resource resource){
+    public void loadBeanDefinitions(Resource resource) {
         InputStream is = null;
-        try{
+        try {
             is = resource.getInputStream();
             SAXReader reader = new SAXReader();
             Document doc = reader.read(is);
 
             Element root = doc.getRootElement(); //<beans>
             Iterator<Element> iter = root.elementIterator();
-            while(iter.hasNext()){
-                Element ele = (Element)iter.next();
+            while (iter.hasNext()) {
+                Element ele = (Element) iter.next();
                 //对于每个元素，我们需要判断它的URI
                 String namespaceUri = ele.getNamespaceURI();
                 /* 弃用部分
@@ -79,18 +79,18 @@ public class XmlBeanDefinitionReader {
                 parsePropertyElement(ele,bd);
                 this.registry.registerBeanDefinition(id, bd);*/
                 //如果是普通的bean，走老的路径，就是上方注释的代码
-                if(this.isDefaultNamespace(namespaceUri)){
+                if (this.isDefaultNamespace(namespaceUri)) {
                     parseDefaultElement(ele); //普通的bean
                 }
                 //如果是注解修饰的bean，走新的路径
-                else if(this.isContextNamespace(namespaceUri)){
+                else if (this.isContextNamespace(namespaceUri)) {
                     parseComponentElement(ele); //例如<context:component-scan>
                 }
             }
         } catch (Exception e) {
-            throw new BeanDefinitionStoreException("IOException parsing XML document from " +  resource.getDescription(),e);
-        }finally{
-            if(is != null){
+            throw new BeanDefinitionStoreException("IOException parsing XML document from " + resource.getDescription(), e);
+        } finally {
+            if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
@@ -107,41 +107,42 @@ public class XmlBeanDefinitionReader {
         scanner.doScan(basePackages);
 
     }
+
     private void parseDefaultElement(Element ele) {
         String id = ele.attributeValue(ID_ATTRIBUTE);
         String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
-        BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
-        if (ele.attribute(SCOPE_ATTRIBUTE)!=null) {
+        BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
+        if (ele.attribute(SCOPE_ATTRIBUTE) != null) {
             bd.setScope(ele.attributeValue(SCOPE_ATTRIBUTE));
         }
-        parseConstructorArgElements(ele,bd);
-        parsePropertyElement(ele,bd);
+        parseConstructorArgElements(ele, bd);
+        parsePropertyElement(ele, bd);
         this.registry.registerBeanDefinition(id, bd);
 
     }
+
     public boolean isDefaultNamespace(String namespaceUri) {
         return (!StringUtils.hasLength(namespaceUri) || BEANS_NAMESPACE_URI.equals(namespaceUri));
     }
-    public boolean isContextNamespace(String namespaceUri){
+
+    public boolean isContextNamespace(String namespaceUri) {
         return (!StringUtils.hasLength(namespaceUri) || CONTEXT_NAMESPACE_URI.equals(namespaceUri));
     }
 
     /**
-     *
      * @param beanEle
      * @param bd
      */
     public void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
         Iterator iter = beanEle.elementIterator(CONSTRUCTOR_ARG_ELEMENT);
-        while(iter.hasNext()){
-            Element ele = (Element)iter.next();
+        while (iter.hasNext()) {
+            Element ele = (Element) iter.next();
             parseConstructorArgElement(ele, bd);
         }
 
     }
 
     /**
-     *
      * @param ele
      * @param bd
      */
@@ -163,13 +164,14 @@ public class XmlBeanDefinitionReader {
 
     /**
      * 解析 PropertyElement ，取所有的 PROPERTY 并遍历，通过取出
+     *
      * @param beanElem
      * @param bd
      */
     public void parsePropertyElement(Element beanElem, BeanDefinition bd) {
-        Iterator iter= beanElem.elementIterator(PROPERTY_ELEMENT);
-        while(iter.hasNext()){
-            Element propElem = (Element)iter.next();
+        Iterator iter = beanElem.elementIterator(PROPERTY_ELEMENT);
+        while (iter.hasNext()) {
+            Element propElem = (Element) iter.next();
             String propertyName = propElem.attributeValue(NAME_ATTRIBUTE);
             if (!StringUtils.hasLength(propertyName)) {
                 logger.fatal("Tag 'property' must have a 'name' attribute");
@@ -185,6 +187,7 @@ public class XmlBeanDefinitionReader {
 
     /**
      * 解析 value
+     *
      * @param ele
      * @param bd
      * @param propertyName
@@ -196,8 +199,8 @@ public class XmlBeanDefinitionReader {
                 "<constructor-arg> element";
 
 
-        boolean hasRefAttribute = (ele.attribute(REF_ATTRIBUTE)!=null);
-        boolean hasValueAttribute = (ele.attribute(VALUE_ATTRIBUTE) !=null);
+        boolean hasRefAttribute = (ele.attribute(REF_ATTRIBUTE) != null);
+        boolean hasValueAttribute = (ele.attribute(VALUE_ATTRIBUTE) != null);
 
         if (hasRefAttribute) {
             String refName = ele.attributeValue(REF_ATTRIBUTE);
@@ -206,12 +209,11 @@ public class XmlBeanDefinitionReader {
             }
             RuntimeBeanReference ref = new RuntimeBeanReference(refName);
             return ref;
-        }else if (hasValueAttribute) {
+        } else if (hasValueAttribute) {
             TypedStringValue valueHolder = new TypedStringValue(ele.attributeValue(VALUE_ATTRIBUTE));
 
             return valueHolder;
-        }
-        else {
+        } else {
             //目前还不支持其他解析，所以抛出异常
             throw new RuntimeException(elementName + " must specify a ref or value");
         }

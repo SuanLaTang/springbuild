@@ -7,7 +7,7 @@ import org.springframework.asm.SpringAsmInfo;
 import java.util.Map;
 
 /**
- *  实现对一个注解属性的解析
+ * 实现对一个注解属性的解析
  */
 final class AnnotationAttributesReadingVisitor extends AnnotationVisitor {
 
@@ -33,8 +33,7 @@ final class AnnotationAttributesReadingVisitor extends AnnotationVisitor {
     }
 
     /**
-     *
-     * @param attributeName 传递的是注解上的属性名称 @Component(value="petStore") 中的 value
+     * @param attributeName  传递的是注解上的属性名称 @Component(value="petStore") 中的 value
      * @param attributeValue 传递的是注解上的value值 @Component(value="petStore") 中的 petStore
      */
     @Override

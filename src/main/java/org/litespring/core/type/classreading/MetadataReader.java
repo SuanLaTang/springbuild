@@ -1,8 +1,8 @@
 package org.litespring.core.type.classreading;
 
+import org.litespring.core.io.Resource;
 import org.litespring.core.type.AnnotationMetadata;
 import org.litespring.core.type.ClassMetadata;
-import org.litespring.core.io.Resource;
 
 /**
  * Simple facade for accessing class metadata,
@@ -10,25 +10,25 @@ import org.litespring.core.io.Resource;
  *
  * @author Juergen Hoeller
  * @since 2.5
- *
+ * <p>
  * 我们希望所有操作通过这个 MetadataReader 接口来实现，把两个Visit隐藏起来，这个作为对外暴露接口
  */
 public interface MetadataReader {
 
-	/**
-	 * Return the resource reference for the class file.
-	 */
-	Resource getResource();
+    /**
+     * Return the resource reference for the class file.
+     */
+    Resource getResource();
 
-	/**
-	 * Read basic class metadata for the underlying class.
-	 */
-	ClassMetadata getClassMetadata();
+    /**
+     * Read basic class metadata for the underlying class.
+     */
+    ClassMetadata getClassMetadata();
 
-	/**
-	 * Read full annotation metadata for the underlying class,
-	 * including metadata for annotated methods.
-	 */
-	AnnotationMetadata getAnnotationMetadata();
+    /**
+     * Read full annotation metadata for the underlying class,
+     * including metadata for annotated methods.
+     */
+    AnnotationMetadata getAnnotationMetadata();
 
 }

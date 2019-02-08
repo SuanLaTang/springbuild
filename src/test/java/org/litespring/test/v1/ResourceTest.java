@@ -1,12 +1,11 @@
 package org.litespring.test.v1;
 
-import java.io.InputStream;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.litespring.core.io.ClassPathResource;
-import org.litespring.core.io.FileSystemResource;
 import org.litespring.core.io.Resource;
+
+import java.io.InputStream;
 
 public class ResourceTest {
 
@@ -32,6 +31,7 @@ public class ResourceTest {
 
     /**
      * 真正路径，需要自行修改构造函数里的路径
+     *
      * @throws Exception
      */
     @Test

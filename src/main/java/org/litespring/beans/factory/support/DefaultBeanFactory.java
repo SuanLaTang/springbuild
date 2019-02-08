@@ -4,7 +4,6 @@ import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.PropertyValue;
 import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
-import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
 import org.litespring.util.ClassUtils;
 
@@ -17,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
 ////同时这也是Spring的命名规范
-public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory,BeanDefinitionRegistry {
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     private ClassLoader beanClassLoader;
 
@@ -28,7 +27,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     @Override
-    public void registerBeanDefinition(String beanID, BeanDefinition bd){
+    public void registerBeanDefinition(String beanID, BeanDefinition bd) {
         this.beanDefinitionMap.put(beanID, bd);
     }
 
@@ -40,12 +39,12 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     @Override
     public Object getBean(String beanID) {
         BeanDefinition bd = this.getBeanDefinition(beanID);
-        if(bd == null){
+        if (bd == null) {
             return null;
         }
-        if(bd.isSingleton()){
+        if (bd.isSingleton()) {
             Object bean = this.getSingleton(beanID);
-            if(bean == null){
+            if (bean == null) {
                 bean = createBean(bd);
                 this.registerSingleton(beanID, bean);
             }
@@ -69,6 +68,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     /**
      * 把 createBean() 拆分成两个方法：instantiateBean() 和 populateBean()
+     *
      * @param bd
      * @return
      */
@@ -84,15 +84,16 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     /**
      * 通过 BeanDefinition(Bean的定义)中的className，用反射的方式来初始化Bean
+     *
      * @param bd
      * @return
      */
     private Object instantiateBean(BeanDefinition bd) {
         //如果 BeanDefinition 有构造函数参数，就用构造器注入
-        if(bd.hasConstructorArgumentValues()){
+        if (bd.hasConstructorArgumentValues()) {
             ConstructorResolver resolver = new ConstructorResolver(this);
             return resolver.autowireConstructor(bd);
-        }else{
+        } else {
             ClassLoader cl = this.getBeanClassLoader();
             String beanClassName = bd.getBeanClassName();
             try {
@@ -101,17 +102,18 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
                 Class<?> clz = cl.loadClass(beanClassName);
                 return clz.newInstance();
             } catch (Exception e) {
-                throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+                throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
             }
         }
     }
 
     /**
      * 在本方法里调用setter方法
+     *
      * @param bd
      * @param bean
      */
-    protected void populateBean(BeanDefinition bd, Object bean){
+    protected void populateBean(BeanDefinition bd, Object bean) {
         List<PropertyValue> pvs = bd.getPropertyValues();
 
         if (pvs == null || pvs.isEmpty()) {
@@ -120,18 +122,18 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
         BeanDefinitionValueResolver valueResolver = new BeanDefinitionValueResolver(this);
         SimpleTypeConverter converter = new SimpleTypeConverter();
-        try{
+        try {
             //获取bean中有哪些字段和方法体
             BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
             //获取字段
             PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
-            for (PropertyValue pv : pvs){
+            for (PropertyValue pv : pvs) {
                 String propertyName = pv.getName();
                 Object originalValue = pv.getValue();
                 Object resolvedValue = valueResolver.resolveValueIfNecessary(originalValue);
 
                 for (PropertyDescriptor pd : pds) {
-                    if(pd.getName().equals(propertyName)){
+                    if (pd.getName().equals(propertyName)) {
                         //getWriteMethod() 就是 setter方法 (实现 TypeConverter 后弃用)
 //                        pd.getWriteMethod().invoke(bean, resolvedValue);
                         Object convertedValue = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
@@ -142,7 +144,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
 
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw new BeanCreationException("Failed to obtain BeanInfo for class [" + bd.getBeanClassName() + "]", ex);
         }
     }

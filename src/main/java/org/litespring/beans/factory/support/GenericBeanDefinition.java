@@ -31,7 +31,7 @@ public class GenericBeanDefinition implements BeanDefinition {
 
     }
 
-    public void setBeanClassName(String className){
+    public void setBeanClassName(String className) {
         this.beanClassName = className;
     }
 
@@ -78,7 +78,7 @@ public class GenericBeanDefinition implements BeanDefinition {
         return this.id;
     }
 
-    public void setId(String id){
+    public void setId(String id) {
         this.id = id;
     }
 

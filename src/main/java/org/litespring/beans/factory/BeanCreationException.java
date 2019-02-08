@@ -5,10 +5,12 @@ import org.litespring.beans.BeansException;
 public class BeanCreationException extends BeansException {
 
     private String beanName;
+
     public BeanCreationException(String msg) {
         super(msg);
 
     }
+
     public BeanCreationException(String msg, Throwable cause) {
         super(msg, cause);
     }
@@ -22,7 +24,8 @@ public class BeanCreationException extends BeansException {
         this(beanName, msg);
         initCause(cause);
     }
-    public String getBeanName(){
+
+    public String getBeanName() {
         return this.beanName;
     }
 
