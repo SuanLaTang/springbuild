@@ -36,6 +36,12 @@ public class GenericBeanDefinition implements BeanDefinition {
         this.beanClassName = className;
     }
 
+    /**
+     * 把 ClassName 变成 Class 对象
+     * @param classLoader
+     * @return
+     * @throws ClassNotFoundException
+     */
     @Override
     public Class<?> resolveBeanClass(ClassLoader classLoader) throws ClassNotFoundException {
         String className = getBeanClassName();

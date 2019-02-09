@@ -2,6 +2,9 @@ package org.litespring.beans.factory.annotation;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class InjectionMetadata {
 
     private final Class<?> targetClass;

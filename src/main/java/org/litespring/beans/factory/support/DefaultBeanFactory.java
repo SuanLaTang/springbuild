@@ -161,6 +161,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         this.beanClassLoader = beanClassLoader;
     }
 
+    /**
+     * 类型注入
+     * @param descriptor
+     * @return
+     *
+     * PetStoreService 中的 AccountDao 和 ItemDao
+     *
+     */
+    @Override
     public Object resolveDependency(DependencyDescriptor descriptor) {
 
         Class<?> typeToMatch = descriptor.getDependencyType();
@@ -175,11 +184,16 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         return null;
     }
 
+    /**
+     * 确保BeanDefinition 有Class对象
+     * @param bd
+     */
     public void resolveBeanClass(BeanDefinition bd) {
         if (bd.hasBeanClass()) {
             return;
         } else {
             try {
+
                 bd.resolveBeanClass(this.getBeanClassLoader());
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("can't load class:" + bd.getBeanClassName());

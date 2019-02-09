@@ -12,7 +12,7 @@ import org.litespring.service.v4.PetStoreService;
 
 import java.lang.reflect.Field;
 
-public class DependencyDescriptorTest {
+public class  DependencyDescriptorTest {
 
     @Test
     public void testResolveDependency() throws Exception {
