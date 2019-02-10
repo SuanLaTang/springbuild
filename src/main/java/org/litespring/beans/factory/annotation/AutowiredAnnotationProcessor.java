@@ -14,6 +14,10 @@ import org.litespring.core.annotation.AnnotationUtils;
 import org.litespring.util.ReflectionUtils;
 
 
+/**
+ * 把一个Class变成 InjectionMetadata
+ * @author 酸辣辣辣汤
+ */
 public class AutowiredAnnotationProcessor  {
 	
 	private AutowireCapableBeanFactory beanFactory;
@@ -26,7 +30,12 @@ public class AutowiredAnnotationProcessor  {
 	public AutowiredAnnotationProcessor(){
 		this.autowiredAnnotationTypes.add(Autowired.class);
 	}
-	
+
+	/**
+	 * 把一个Class传进来，就能形成 InjectionMetadata
+	 * @param clazz
+	 * @return
+	 */
 	public InjectionMetadata buildAutowiringMetadata(Class<?> clazz) {
 		
 		LinkedList<InjectionElement> elements = new LinkedList<InjectionElement>();
@@ -34,13 +43,17 @@ public class AutowiredAnnotationProcessor  {
 
 		do {
 			LinkedList<InjectionElement> currElements = new LinkedList<InjectionElement>();
+			//遍历Class的字段名
 			for (Field field : targetClass.getDeclaredFields()) {
 				Annotation ann = findAutowiredAnnotation(field);
+
 				if (ann != null) {
+					//如果是静态，就跳过
 					if (Modifier.isStatic(field.getModifiers())) {
 						
 						continue;
 					}
+					//不是静态，则判断是否required
 					boolean required = determineRequiredStatus(ann);
 					currElements.add(new AutowiredFieldElement(field, required,beanFactory));
 				}
@@ -55,7 +68,12 @@ public class AutowiredAnnotationProcessor  {
 
 		return new InjectionMetadata(clazz, elements);
 	}
-	
+
+	/**
+	 * 判断是否 required
+	 * @param ann
+	 * @return
+	 */
 	protected boolean determineRequiredStatus(Annotation ann) {
 		try {
 			Method method = ReflectionUtils.findMethod(ann.annotationType(), this.requiredParameterName);

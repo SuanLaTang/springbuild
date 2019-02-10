@@ -20,6 +20,7 @@ import org.litespring.service.v4.PetStoreService;
 public class AutowiredAnnotationProcessorTest {
 	AccountDao accountDao = new AccountDao();
 	ItemDao itemDao = new ItemDao();
+	//通过mock的方式返回指定的值
 	DefaultBeanFactory beanFactory = new DefaultBeanFactory(){
 		public Object resolveDependency(DependencyDescriptor descriptor){
 			if(descriptor.getDependencyType().equals(AccountDao.class)){
@@ -31,9 +32,11 @@ public class AutowiredAnnotationProcessorTest {
 			throw new RuntimeException("can't support types except AccountDao and ItemDao");
 		}
 	};
-	
-	
 
+
+	/**
+	 * 这里的重点应该是，怎么获取一个类的Metadata，而不是做inject
+	 */
 	@Test
 	public void testGetInjectionMetadata(){
 		
@@ -51,10 +54,15 @@ public class AutowiredAnnotationProcessorTest {
 		injectionMetadata.inject(petStore);
 		
 		Assert.assertTrue(petStore.getAccountDao() instanceof AccountDao);
-		
+
 		Assert.assertTrue(petStore.getItemDao() instanceof ItemDao);
 	}
-	
+
+	/**
+	 * 属性是否存在(本质是遍历这个集合)
+	 * @param elements
+	 * @param fieldName
+	 */
 	private void assertFieldExists(List<InjectionElement> elements ,String fieldName){
 		for(InjectionElement ele : elements){
 			AutowiredFieldElement fieldEle = (AutowiredFieldElement)ele;
