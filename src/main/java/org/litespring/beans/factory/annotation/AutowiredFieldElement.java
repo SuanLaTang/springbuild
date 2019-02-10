@@ -24,13 +24,14 @@ public class AutowiredFieldElement extends InjectionElement {
 
         Field field = this.getField();
         try {
-
+            //先把 field 封装成 DependencyDescriptor
             DependencyDescriptor desc = new DependencyDescriptor(field, this.required);
 
             Object value = factory.resolveDependency(desc);
 
             if (value != null) {
 
+                //置为可访问的
                 ReflectionUtils.makeAccessible(field);
                 field.set(target, value);
             }

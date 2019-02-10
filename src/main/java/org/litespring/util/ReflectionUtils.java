@@ -159,6 +159,10 @@ public abstract class ReflectionUtils {
         throw new UndeclaredThrowableException(ex);
     }
 
+    /**
+     * 把某个字段置为可访问的
+     * @param field
+     */
     public static void makeAccessible(Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) ||
                 !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
