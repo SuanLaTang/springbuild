@@ -1,3 +1,5 @@
+//为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
+//同时这也是Spring的命名规范
 package org.litespring.beans.factory.support;
 
 import org.litespring.beans.BeanDefinition;
@@ -18,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//为什么要放到support包下，因为我们希望factory放的是接口，别的程序员使用我们框架的API
-////同时这也是Spring的命名规范
+
 public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     private ClassLoader beanClassLoader;

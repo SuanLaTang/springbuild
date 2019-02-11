@@ -110,12 +110,26 @@ public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostP
         this.beanFactory = beanFactory;
     }
 
+    /**
+     * 在实例化之前
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object beforeInitialization(Object bean, String beanName) throws BeansException {
         //do nothing
         return bean;
     }
 
+    /**
+     * 在实例化之后
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object afterInitialization(Object bean, String beanName) throws BeansException {
         // do nothing
@@ -137,6 +151,7 @@ public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostP
     public void postProcessPropertyValues(Object bean, String beanName) throws BeansException {
         InjectionMetadata metadata = buildAutowiringMetadata(bean.getClass());
         try {
+            //把bean中的所有东西都注入进去
             metadata.inject(bean);
         } catch (Throwable ex) {
             throw new BeanCreationException(beanName, "Injection of autowired dependencies failed", ex);

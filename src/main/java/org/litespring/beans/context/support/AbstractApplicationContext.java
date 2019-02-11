@@ -8,7 +8,9 @@ import org.litespring.context.ApplicationContext;
 import org.litespring.core.io.Resource;
 import org.litespring.util.ClassUtils;
 
-
+/**
+ * 创建PostProcessor
+ */
 public abstract class AbstractApplicationContext implements ApplicationContext {
 
     private DefaultBeanFactory factory = null;
